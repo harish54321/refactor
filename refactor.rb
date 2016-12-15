@@ -30,6 +30,9 @@ class People < ActionController::Base
 		end
 	end
 
+# This validateEmail action have not been used , but it seems to work for validating the user by admin.
+# So, I hope when admin accepted the person as a validate user then this method will trigger. otherwise we can remove this action 
+
 	def validateEmail
 		@user = Person.find_by_slug(params[:slug])
 		if @user.present?
@@ -57,6 +60,7 @@ end
 
 class Emails < ActionMailer::Base
 
+# This  welcome action depends on validateEmail action in controller.
   def welcome(person)
       @person = person
       mail to: @person, from: 'foo@example.com'
@@ -66,6 +70,8 @@ class Emails < ActionMailer::Base
       @person = person
       mail to: @person, from: 'foo@example.com'
   end
+
+# This admin_user_validate action depends on validateEmail action in controller.
 
 	def admin_user_validated(admins, user)
 	    @admins = admins.collect {|a| a.email } rescue []
