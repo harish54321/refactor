@@ -13,15 +13,11 @@ class People < ActionController::Base
 		@person.admin = false
 
 		if @count.odd?
-			team = "UnicornRainbows"
-			handle = "UnicornRainbows" + @count.to_s
-			@person.handle = handle
-			@person.team = team
+			@person.handle = "UnicornRainbows" + @count.to_s
+			@person.team = "UnicornRainbows"
 		else
-			team = "LaserScorpions"
-			handle = "LaserScorpions" + @count.to_s
-			@person.handle = handle
-			@person.team = team
+			@person.handle = "LaserScorpions" + @count.to_s
+			@person.team = "LaserScorpions"
 		end
 
 		if @person.save
