@@ -6,19 +6,20 @@ class People < ActionController::Base
 
 	def create
 		@person = Person.new(params[:person])
+		@count  = Person.count + 1
 
 		slug = "ABC123#{Time.now.to_i}1239827#{rand(10000)}" 
 		@person.slug = slug
 		@person.admin = false
 
-		if (Person.count + 1).odd?
+		if @count.odd?
 			team = "UnicornRainbows"
-			handle = "UnicornRainbows" + (Person.count + 1).to_s
+			handle = "UnicornRainbows" + @count.to_s
 			@person.handle = handle
 			@person.team = team
 		else
 			team = "LaserScorpions"
-			handle = "LaserScorpions" + (Person.count + 1).to_s
+			handle = "LaserScorpions" + @count.to_s
 			@person.handle = handle
 			@person.team = team
 		end
