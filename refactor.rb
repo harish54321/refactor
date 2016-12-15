@@ -14,15 +14,15 @@ class People < ActionController::Base
 
 		if @count.odd?
 			@person.handle = "UnicornRainbows" + @count.to_s
-			@person.team = "UnicornRainbows"
+			@person.team   = "UnicornRainbows"
 		else
 			@person.handle = "LaserScorpions" + @count.to_s
-			@person.team = "LaserScorpions"
+			@person.team   = "LaserScorpions"
 		end
 
 		if @person.save
 			Emails.validate_email(@person).deliver
-			@admins = Person.where(:admin => true)
+			@admins = Person.admins
 			Emails.admin_new_user(@admins, @person).deliver
 			redirect_to @person, :notice => "Account added!"
 		else
@@ -36,7 +36,7 @@ class People < ActionController::Base
 			@user.validated = true
 			@user.save
 			Rails.logger.info "USER: User ##{@person.id} validated email successfully."
-			@admins = Person.where(:admin => true)
+			@admins = Person.admins
 			Emails.admin_user_validated(@admins, user)
 			Emails.welcome(@user).deliver!
 		end
@@ -49,6 +49,7 @@ end
 
 class Person < ActiveRecord::Base
 	attr_accessible :first_name, :last_name, :email, :admin, :slug, :validated, :handle, :team
+	scope :admins -> { where(:admin => true) }
 end
 
 
@@ -98,7 +99,7 @@ namespace :accounts do
 			Rails.logger.info "Removing unvalidated user #{person.email}"
 			person.destroy
 		end
-		Emails.admin_removing_unvalidated_users(Person.where(:admin => true), @people).deliver
+		Emails.admin_removing_unvalidated_users(Person.admins), @people).deliver
 	end
 	
 end
