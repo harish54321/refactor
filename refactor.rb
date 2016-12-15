@@ -7,7 +7,7 @@ class People < ActionController::Base
 	def create
 		@person = Person.new(params[:person])
 
-		slug = "ABC123#{Time.now.to_i.to_s}1239827#{rand(10000)}" 
+		slug = "ABC123#{Time.now.to_i}1239827#{rand(10000)}" 
 		@person.slug = slug
 		@person.admin = false
 
